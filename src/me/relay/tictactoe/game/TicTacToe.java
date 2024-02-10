@@ -37,18 +37,32 @@ public class TicTacToe {
             for (int i = 0; i < players.length; i++) {
                 Player player = players[i];
 
-                System.out.print("Player " + (i+1) + "'s Move: ");
+                System.out.print("Player " + (i+1) + "'s turn...");
                 board = player.play(board);
+                System.out.println();
+
+                System.out.print(DECORATIVE_BORDER);
                 System.out.println();
 
                 // If the player requested to quit the game, end it here.
                 if (exitRequest)
                     System.exit(0);
 
-                System.out.print(DECORATIVE_BORDER);
-                System.out.println();
-
                 board.print();
+
+                boolean draw = board.getAvailableMoves().isEmpty();
+                boolean win = board.hasWinner();
+                if (draw || win) {
+                    if (win) {
+                        System.out.println("Player " + (i+1) + " wins!");
+                    }
+                    else {
+                        System.out.println("It's a draw!");
+                    }
+
+                    System.out.print(DECORATIVE_BORDER);
+                    System.exit(0);
+                }
             }
         }
     }

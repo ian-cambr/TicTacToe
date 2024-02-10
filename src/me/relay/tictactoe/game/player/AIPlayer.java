@@ -1,9 +1,5 @@
 package me.relay.tictactoe.game.player;
-
 import me.relay.tictactoe.game.board.BoardState;
-import me.relay.tictactoe.game.board.BoardStateException;
-
-import java.util.ArrayList;
 
 public class AIPlayer extends Player {
     private final AIStrategy strategy;
@@ -14,9 +10,9 @@ public class AIPlayer extends Player {
     }
     @Override
     public BoardState play(BoardState current) {
-        int[] suggested = this.evaluate(current);
+        int[] strategy = this.evaluate(current);
 
-        return current.play(suggested[0], suggested[1], this.playerType.toSymbol());
+        return current.play(strategy[0], strategy[1], this.playerType.toSymbol());
     }
 
     private int[] evaluate(BoardState current) {
