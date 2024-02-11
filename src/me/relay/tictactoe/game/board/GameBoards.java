@@ -4,7 +4,6 @@ import me.relay.tictactoe.game.player.PlayerType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Stack;
 
 /**
  * Represents all evaluated game boards.
@@ -14,11 +13,8 @@ import java.util.Stack;
 public class GameBoards {
     private static final GameBoards instance = new GameBoards();
     private final HashMap<BoardState, BoardState[]> boards;
-    private Stack<BoardState> expanded;
-
     private GameBoards () {
         this.boards = new HashMap<>();
-        this.expanded = new Stack<BoardState>();
     }
 
     public static GameBoards getInstance () {

@@ -3,7 +3,6 @@ package me.relay.tictactoe.game.player;
 import me.relay.tictactoe.game.board.BoardState;
 
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 

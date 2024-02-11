@@ -1,7 +1,5 @@
 package me.relay.tictactoe.game.board;
 
-import me.relay.tictactoe.game.player.PlayerType;
-
 import java.util.*;
 
 public class BoardState {
