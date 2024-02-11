@@ -1,6 +1,5 @@
 package me.relay.tictactoe.game.player;
 
-import me.relay.tictactoe.game.board.BoardStateException;
 import me.relay.tictactoe.game.board.BoardSymbol;
 
 public enum PlayerType {
@@ -10,7 +9,13 @@ public enum PlayerType {
         return switch (this) {
             case X -> BoardSymbol.X;
             case O -> BoardSymbol.O;
-            default -> throw new BoardStateException("PlayerType not X or O");
+        };
+    }
+
+    public PlayerType opposite() {
+        return switch (this) {
+            case X -> O;
+            case O -> X;
         };
     }
 }

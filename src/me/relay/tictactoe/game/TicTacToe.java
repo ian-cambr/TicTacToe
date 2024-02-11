@@ -3,7 +3,6 @@ package me.relay.tictactoe.game;
 import me.relay.tictactoe.game.board.BoardState;
 import me.relay.tictactoe.game.player.*;
 
-import java.util.BitSet;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -15,22 +14,28 @@ public class TicTacToe {
      * Starts the game. Called by the entrypoint in Main.java.
      */
     public void start() {
-        BoardState board = new BoardState();
+        BoardState board = BoardState.getEmptyBoard();
 
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Welcome to Tic-Tac-Toe!");
+        System.out.println(DECORATIVE_BORDER);
 
         String input;
         do {
-            System.out.println("Input '1' (human) to play against the AI, or '2' (computer) to have the AIs face off: ");
-            input = scanner.next().toLowerCase();
-            System.out.println(input);
+            System.out.println();
+
+            // IntelliJ suggested this over string concatenation.
+            System.out.print("""
+                    Select the AI's opponent:
+                    [1] Human
+                    [2] AI
+                    ==>\t""");
+
+            input = scanner.next();
         } while (!input.matches("[12]"));
 
         Player[] players = generatePlayers(input.equals("2"), scanner);
 
-        System.out.print(DECORATIVE_BORDER);
-        System.out.println();
+        System.out.println(DECORATIVE_BORDER);
         board.print();
 
         while (true) {
@@ -38,11 +43,12 @@ public class TicTacToe {
                 Player player = players[i];
 
                 System.out.print("Player " + (i+1) + "'s turn...");
+                System.out.println();
+
                 board = player.play(board);
                 System.out.println();
 
-                System.out.print(DECORATIVE_BORDER);
-                System.out.println();
+                System.out.println(DECORATIVE_BORDER);
 
                 // If the player requested to quit the game, end it here.
                 if (exitRequest)
@@ -51,7 +57,7 @@ public class TicTacToe {
                 board.print();
 
                 boolean draw = board.getAvailableMoves().isEmpty();
-                boolean win = board.hasWinner();
+                boolean win = board.getWinner().isPresent();
                 if (draw || win) {
                     if (win) {
                         System.out.println("Player " + (i+1) + " wins!");
@@ -60,7 +66,7 @@ public class TicTacToe {
                         System.out.println("It's a draw!");
                     }
 
-                    System.out.print(DECORATIVE_BORDER);
+                    System.out.println(DECORATIVE_BORDER);
                     System.exit(0);
                 }
             }
@@ -70,8 +76,8 @@ public class TicTacToe {
     private Player[] generatePlayers(boolean bothAI, Scanner scanner) {
         Player[] players = new Player[]
                     {
-                            new AIPlayer(PlayerType.X, AIStrategy.RANDOM),
-                            new AIPlayer(PlayerType.O, AIStrategy.RANDOM),
+                            new AIPlayer(PlayerType.X, AIStrategy.MINIMAX),
+                            new AIPlayer(PlayerType.O, AIStrategy.MINIMAX),
                     };
 
         if (bothAI) return players;

@@ -8,7 +8,7 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class HumanPlayer extends Player{
-    private Scanner scanner;
+    private final Scanner scanner;
     public HumanPlayer(PlayerType playerType, Scanner scanner) {
         super(playerType);
 
@@ -19,14 +19,13 @@ public class HumanPlayer extends Player{
         ArrayList<int[]> availableMoves = current.getAvailableMoves();
 
         while (true) {
-            System.out.println();
             int row, column;
 
             try {
-                System.out.println("Enter row [0-2]: ");
+                System.out.print("Enter row [0-2]: ");
                 row = scanner.nextInt();
 
-                System.out.println("Enter column [0-2]: ");
+                System.out.print("Enter column [0-2]: ");
                 column = scanner.nextInt();
             }
             catch (NoSuchElementException e) {

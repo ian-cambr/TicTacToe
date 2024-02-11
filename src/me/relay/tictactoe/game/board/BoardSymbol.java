@@ -9,7 +9,14 @@ public enum BoardSymbol {
             case X -> " X ";
             case O -> " O ";
             case NONE -> "   ";
-            default -> throw new IndexOutOfBoundsException("Symbol not found.");
+        };
+    }
+
+    public int asInteger () {
+        return switch (this) {
+            case X -> 1;
+            case O -> -1;
+            case NONE -> 0;
         };
     }
 }
