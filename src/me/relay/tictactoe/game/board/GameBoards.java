@@ -17,6 +17,9 @@ public class GameBoards {
         this.boards = new HashMap<>();
     }
 
+    /**
+     * @return The singleton instance of the GameBoards class.
+     */
     public static GameBoards getInstance () {
         return instance;
     }

@@ -8,6 +8,11 @@ import java.util.Scanner;
 
 public class TicTacToe {
     private static final String DECORATIVE_BORDER = "=================================================";
+
+    /**
+     * If true, the game will end after the current turn.
+     * Exit code (to be entered by the player) is [255,255]
+     */
     public static boolean exitRequest = false;
 
     /**
@@ -51,8 +56,10 @@ public class TicTacToe {
                 System.out.println(DECORATIVE_BORDER);
 
                 // If the player requested to quit the game, end it here.
-                if (exitRequest)
+                if (exitRequest) {
+                    scanner.close();
                     System.exit(0);
+                }
 
                 board.print();
 
@@ -73,6 +80,12 @@ public class TicTacToe {
         }
     }
 
+    /**
+     * Generates the players for the game.
+     * @param bothAI If true, both players will be AI players.
+     * @param scanner The scanner to use for human input.
+     * @return The players.
+     */
     private Player[] generatePlayers(boolean bothAI, Scanner scanner) {
         Player[] players = new Player[]
                     {

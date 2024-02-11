@@ -3,7 +3,21 @@ import me.relay.tictactoe.game.board.BoardState;
 import me.relay.tictactoe.game.board.GameBoards;
 
 public class AIPlayer extends Player {
+    /**
+     * The strategy to use for this AI.
+     */
     private final AIStrategy strategy;
+
+    /**
+     * The maximum depth to search to.
+     */
+    private static final int MAX_DEPTH = 3;
+
+    /**
+     * The number of nodes (leaves) expanded during the last minimax evaluation.
+     */
+    private int nodesExpanded = 0;
+
     public AIPlayer (PlayerType type, AIStrategy strategy) {
         super(type);
 
@@ -38,9 +52,6 @@ public class AIPlayer extends Player {
         return current.deduce(best.board());
     }
 
-    private static final int MAX_DEPTH = 3;
-    private int nodesExpanded = 0;
-
     /**
      * Minimax algorithm. Recursively evaluates the board state!
      * @param node The current board state.
@@ -51,15 +62,21 @@ public class AIPlayer extends Player {
      */
     private BoardTuple minimax(BoardState node, int currentDepth, boolean isMaximizing, PlayerType player) {
 
+        // First, check if we've reached the maximum depth, if there's a winner, or if there are no available moves.
+        // If so, return the board state and its score, as we can't go any deeper.
         if (currentDepth == MAX_DEPTH || node.getWinner().isPresent() || node.getAvailableMoves().isEmpty()) {
             this.nodesExpanded++;
             return new BoardTuple(node, node.heuristicEvaluate());
         }
 
+        // Get all possible boards from the current board state.
         BoardState[] boards = GameBoards.getInstance().getBoards(node, player);
 
+        // Now, we need to recursively evaluate the board states.
+        // We'll use a Record to keep track of the best board state and its score.
         BoardTuple bestValue = new BoardTuple(null, isMaximizing ? Integer.MIN_VALUE : Integer.MAX_VALUE);
 
+        // Depending on whether we're maximizing or minimizing, this will look a bit different.
         for (BoardState board : boards) {
             BoardTuple value = minimax(board, currentDepth + 1, !isMaximizing, player.opposite());
 
@@ -78,5 +95,8 @@ public class AIPlayer extends Player {
     }
 }
 
+/**
+ * This is a simple tuple used to couple a board state with a score.
+ */
 record BoardTuple(BoardState board, int score) {
 }

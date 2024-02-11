@@ -3,12 +3,22 @@ package me.relay.tictactoe.game.board;
 import java.util.*;
 
 public class BoardState {
+    /**
+     * The board is represented as a 3x3 array of enumerable values.
+     */
     private final BoardSymbol[][] board = new BoardSymbol[3][3];
+    /**
+     * The parent of this board state. If this is the initial board, this will be null.
+     */
     private final BoardState parent;
 
     public static BoardState getEmptyBoard() {
         return new BoardState();
     }
+
+    /**
+     * Create an empty board. Should only be used for the initial board / getEmptyBoard() call.
+     */
     private BoardState () {
         this.parent = null;
         for (BoardSymbol[] row : board) {
@@ -18,7 +28,7 @@ public class BoardState {
 
     /**
       * Copy constructor.
-      * @param other The BoardState to copy.
+      * @param other The BoardState to copy (or the parent of the new BoardState).
       * Since internal lines will likely be recalculated anyway, we don't need to copy them.
      */
     private BoardState(BoardState other) {
@@ -27,6 +37,10 @@ public class BoardState {
             this.board[i] = other.board[i].clone();
     }
 
+    /**
+     * Get the previous board state one move ago.
+     * @return The parent of the board state.
+     */
     public BoardState getParent() {
         return this.parent;
     }
@@ -54,12 +68,20 @@ public class BoardState {
         return modified;
     }
 
+    /**
+     * Get a random available move from the current board state.
+     * @return A random available move, delineated by [row,column].
+     */
     public int[] getRandomAvailableMove() {
         ArrayList<int[]> available = this.getAvailableMoves();
 
         return available.get(new Random().nextInt(available.size()));
     }
 
+    /**
+     * Get all available moves from the current board state.
+     * @return A list of all available moves, delineated by [row,column].
+     */
     public ArrayList<int[]> getAvailableMoves() {
         ArrayList<int[]> available = new ArrayList<>();
 
@@ -73,6 +95,9 @@ public class BoardState {
         return available;
     }
 
+    /**
+     * Print the board to the console, with formatting.
+     */
     public void print() {
         System.out.println();
         StringJoiner table = new StringJoiner("\n---+---+---\n");
@@ -97,6 +122,12 @@ public class BoardState {
      * Instead, use getLines().
      */
     private BoardSymbol[][] internalLines = null;
+
+    /**
+     * This method calculates (or uses the memoized version of) the lines of the board;
+     * rows 1-3, columns 1-3, diagonals 1/2.
+     * @return The board's lines.
+     */
     private BoardSymbol[][] getLines() {
         if (internalLines == null) {
             internalLines = new BoardSymbol[][]{
@@ -116,6 +147,10 @@ public class BoardState {
         return internalLines;
     }
 
+    /**
+     * Get the winner from the current board state, or empty if there is no winner.
+     * @return The winner of the game, if there is one.
+     */
     public Optional<BoardSymbol> getWinner() {
         // Pull winning patterns from the board to check.
         // Rows 1-3, Columns 1-3, Diagonals 1/2
@@ -136,7 +171,7 @@ public class BoardState {
      * Evaluate the current board state.
      * Heuristic: +3 for each row, column, or diagonal with 2 X and 1 empty space.
      * +1 for each row, column, or diagonal with 1 X and 2 empty spaces.
-     * And the same for O.
+     * And the same for O, but negative.
      * 128 for X win, -128 for O win.
      */
     public int heuristicEvaluate() {
@@ -213,4 +248,16 @@ public class BoardState {
 
         return null;
     }
+
+    // Below is a method of hashing I wrote but didn't end up using.
+    // I still wanted to keep it around for reference.
+    // If I were to revisit this, I would likely run everything
+    // with this hash and construct on the fly.
+    /*
+    for (BoardSymbol[] row : board) {
+        for (BoardSymbol symbol : row) {
+            hash = hash << 2 | symbol.ordinal();
+        }
+    }
+    */
 }

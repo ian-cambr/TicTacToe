@@ -1,5 +1,6 @@
 package me.relay.tictactoe.game.player;
 
+import me.relay.tictactoe.game.TicTacToe;
 import me.relay.tictactoe.game.board.BoardState;
 
 import java.util.ArrayList;
@@ -32,6 +33,13 @@ public class HumanPlayer extends Player{
                 scanner.nextLine();
 
                 continue;
+            }
+
+            if (row == 255 && column == 255) {
+                System.out.println("Exit code detected, ending game early...");
+                TicTacToe.exitRequest = true;
+
+                return current;
             }
 
             int[] move = {row, column};
