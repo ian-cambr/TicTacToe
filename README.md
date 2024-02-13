@@ -8,4 +8,4 @@ Output was tested against a sample to verify its correctness.
 
 # License
 
-All rights reserved.
+All rights reserved. See LICENSE.md.
